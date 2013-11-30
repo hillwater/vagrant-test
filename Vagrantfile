@@ -5,7 +5,13 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.provision "shell" do |s|
+    s.inline = "echo $1"
+    s.args = "'hello world'"
+  end
+
   config.vm.provision :shell, :path => "bootstrap.sh"
+
   config.vm.network :forwarded_port, host: 4567, guest: 80
 
 
