@@ -14,6 +14,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network :forwarded_port, host: 4567, guest: 80
 
+  config.vm.network "public_network", :bridge => 'wlan0'
+
 
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
