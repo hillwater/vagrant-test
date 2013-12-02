@@ -5,16 +5,24 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.provision "shell" do |s|
-    s.inline = "echo $1"
-    s.args = "'hello world'"
-  end
-
-  config.vm.provision :shell, :path => "bootstrap.sh"
-
-  config.vm.network :forwarded_port, host: 4567, guest: 80
 
   config.vm.network "public_network", :bridge => 'wlan0'
+
+  config.vm.define "web" do |web|
+    web.vm.provision :shell, :path => "bootstrap.sh"
+    web.vm.network :forwarded_port, host: 4567, guest: 80
+    web.vm.provision "shell" do |s|
+      s.path = "installZabbixAgent.sh"
+      s.args = "'web'"
+    end
+  end
+
+  config.vm.define "slave0" do |slave|
+    slave.vm.provision "shell" do |s|
+      s.path = "installZabbixAgent.sh"
+      s.args = "'slave0'"
+    end
+  end
 
 
   # All Vagrant configuration is done here. The most common configuration
